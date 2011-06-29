@@ -35,6 +35,11 @@ module Paperclip
 
       def flush_writes #:nodoc:
         @queued_for_write.each do |style_name, file|
+          # skip styles that elected not to supply a file
+          if !file
+            next
+          end
+          
           file.close
           FileUtils.mkdir_p(File.dirname(path(style_name)))
           log("saving #{path(style_name)}")
