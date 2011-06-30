@@ -349,7 +349,7 @@ module Paperclip
     def post_process_styles(*style_args) #:nodoc:
       styles.each do |name, style|
         begin
-          if style_args.empty? || style_args.include?(name)
+          if style_args.empty? || style_args.include?(name) || style_args.include?(name.to_s)
             raise RuntimeError.new("Style #{name} has no processors defined.") if style.processors.blank?
             @queued_for_write[name] = style.processors.inject(@queued_for_write[:original]) do |file, processor|
               Paperclip.processor(processor).make(file, style.processor_options, self)
