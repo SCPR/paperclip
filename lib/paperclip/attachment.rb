@@ -104,7 +104,9 @@ module Paperclip
       instance_write(:file_name,       uploaded_file.original_filename.strip)
       instance_write(:content_type,    uploaded_file.content_type.to_s.strip)
       instance_write(:file_size,       uploaded_file.size.to_i)
-      instance_write(:fingerprint,     generate_fingerprint(uploaded_file))
+      # EWR -- This fingerprint call fails since to_tempfile doesn't rewind. 
+      # It's overwritten below, so just comment it out
+      #instance_write(:fingerprint,     generate_fingerprint(uploaded_file))
       instance_write(:updated_at,      Time.now)
 
       @dirty = true
@@ -225,7 +227,7 @@ module Paperclip
     end
 
     def generate_fingerprint(source)
-      if source.respond_to?(:path) && source.path && !source.path.blank?
+      if source.respond_to?(:path) && source.path && !source.path.blank? && File.exists?(source.path)
         Digest::MD5.file(source.path).to_s
       else
         data = source.read
