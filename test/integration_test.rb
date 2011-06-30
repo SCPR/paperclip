@@ -139,6 +139,18 @@ class IntegrationTest < Test::Unit::TestCase
       @dummy.avatar.reprocess! :thumb_large
       assert File.exists?(@thumb_large_path)
     end
+    
+    should "allow us to specify selective style in either symbolized or stringified form" do
+      assert !File.exists?(@thumb_small_path)
+      assert !File.exists?(@thumb_large_path)
+
+      @dummy.avatar.reprocess! :thumb_small
+      assert File.exists?(@thumb_small_path)
+      assert !File.exists?(@thumb_large_path)
+
+      @dummy.avatar.reprocess! "thumb_large"
+      assert File.exists?(@thumb_large_path)
+    end
   end
 
   context "A model that modifies its original" do
