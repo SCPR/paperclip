@@ -90,7 +90,8 @@ module Paperclip
     # If the style has a format defined, it will return the format instead
     # of the actual extension.
     def extension attachment, style_name
-      ((style = attachment.styles[style_name]) && style[:format]) ||
+      # EWR - allow style name to be specified as a string
+      ((style = attachment.styles[style_name.to_sym]) && style[:format]) ||
         File.extname(attachment.original_filename).gsub(/^\.+/, "")
     end
 
